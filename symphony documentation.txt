@@ -1,0 +1,129 @@
+-register
+zr 0000
+r1 0001
+r2 0010
+r3 0011
+r4 0100
+r5 0101
+r6 0110
+r7 0111
+r8 1000
+r9 1001
+r10 1010
+r11 1011
+r12 1100
+r13 1101
+sp 1110
+flags 1111
+
+
+---------------------------------------------------------------------------------------------------
+
+
+nop: Does nothing
+
+in %a(register)
+    Loads an input and stores it in %a
+
+out
+    out %a(register/immediate)
+    Sends %a to output
+
+console
+    console %a(register/immediate)
+    Stores the value of %a in the console offset register
+
+time
+    time_0 %a(register)
+    Loads the two least significant bytes of the time value and stores it to %a
+    time_1 %a(register)
+    Loads the second two bytes of the time value and stores it to %a
+    time_2 %a(register)
+    Loads the third two bytes of the time value and stores it to %a
+    time_3 %a(register)
+    Loads the two most significant bytes of the time value and stores it to %a
+
+counter %a(register)
+    Loads the counter value and stores it to %a
+
+keyboard %a(register)
+    Loads keyboard input and stores it to %a
+
+---------------------------------------------------------------------------------------------------
+
+
+alu %a, %b, %c (%b can be an immediate)
+    nand 
+    or 
+    and
+    nor
+    add 
+    sub
+    xor 
+    lsl 
+    lsr 
+    cmp
+    mul 
+    mov 
+    not 
+    neg 
+
+
+---------------------------------------------------------------------------------------------------
+
+jumps use the result of the previous compare instruction 
+
+jumps 
+    jmp %a(register/immediate/label)
+
+conditional jumps
+        signed
+    je 
+    jne 
+    jl 
+    jge 
+    jle 
+    jg 
+        unsigned
+    jb 
+    jae 
+    jbe 
+    ja 
+
+---------------------------------------------------------------------------------------------------
+
+RAM
+    load_8 %a(reg_dest), [%address(register/immediate)]
+    Loads %address from RAM and stores it to %dest
+    store_8 [%address(immediate/reg)], %b(register) 
+    Store %value to %address in RAM
+
+    load_16 %dest(register), [%address(immediate)]
+    01110010 dddd0000 aaaaaaaa aaaaaaaa
+    Loads %address from RAM and stores it to %dest
+    store_16 [%address(register/immediate)], %value(register)
+    Store %value to %address in RAM
+
+SSD
+    pload_8 %a(reg_dest), [%address(register/immediate)]
+    Loads %address from ssd and stores it to %dest
+    pstore_8 [%address(immediate/reg)], %b(register) 
+    Store %value to %address in ssd
+
+    pload_16 %dest(register), [%address(immediate)]
+    01110010 dddd0000 aaaaaaaa aaaaaaaa
+    pLoads %address from ssd and stores it to %dest
+    store_16 [%address(register/immediate)], %value(register)
+    Store %value to %address in ssd
+
+
+stack
+    push %a (register)
+    Pushes %a on to the stack. This instruction is a synonym for: sub sp, sp, 2 store_16 [sp], %a
+    pop %a (register)
+    Pops %a off the stack. This instruction is a synonym for: load_16 %a, [sp] add sp, sp, 2
+
+    call (label) 
+    calls function
+    return
+    returns from function
