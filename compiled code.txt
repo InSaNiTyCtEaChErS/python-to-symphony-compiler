@@ -1,0 +1,7 @@
+call printtext
+mov r0,1
+mov r0,2
+cmp
+bne a
+  callprinttext
+a:
