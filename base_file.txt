@@ -26,6 +26,9 @@
 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 
 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 <U32>0 
 ;512 nops for console space
+
+;base function code, implememted to prevent having trouble with printing, mostly
+
 const init = 512
 jmp start
 printint:
@@ -76,11 +79,11 @@ printclr:
 	
 start:
 nop
-nop
 mov r12,init
 mov r1,1
 mov r2,2
 nop
-call printstr
+call printstr ; print two smiley faces on the console, used as a test for console offset and other functions
 nop
 console init
+
