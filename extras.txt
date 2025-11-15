@@ -1,0 +1,98 @@
+ cofx:
+     mov r5,flags
+     jle cos_jmp
+         add r1,r1,3 ;low-digit approximation of pi
+     cos_jmp:
+     nop
+     mul r1, r1, r1
+     mul r,1 r1, 4053
+     add r1, r1, 1
+     ret
+ cos:
+     push r3 ;r1 is value to cos/sin, and r2 decides between cosine and sine
+     push r4
+     push r5
+ 
+    cmp r1,31415
+    mov flags, r5
+	mul r2,r2, 15708 ;fixed point approximation of pi/2
+	sub r1,r1,r2
+    mov r1,r4
+    call cofx
+    mov r1,r3
+    neg r1,r1
+    call cofx
+    mul r1,r3,r1 ;this simulates half of the cosine wave minus a power function
+    rol r1,r1,3
+    mov r5,flags
+    jne cos_jmp2
+        neg r1,r1
+    cos_jmp2:
+    nop
+    
+    pull r5
+    pull r4
+	pull r3
+    ret
+
+pow:
+	push r3
+
+	cmp r2,1
+	jle pow_label
+		pow_loop:
+			nop
+			sub r2,r2,1
+			mul r3, r1, r1
+		cmp r2,zr
+		jne pow_loop
+
+	pow_label:
+	mov r3,r1
+	nop
+
+	pop r3
+	ret
+
+
+move_turtle:
+   push r3
+   push r4
+   cmp r1,0
+   jz turtle_x_label
+	   load_8 r3,[0]
+		turtle_move_loop_x:
+			cmp r1,0
+			jl abs_tx
+				sub r1,r1,1
+				add r3,r3,1
+			abs_tx:
+			jg neg_abs_tx
+				add r1,r1,1
+				sub r3,r3,1
+			neg_abs_tx:
+		cmp r1,0
+		jnz turtle_move_loop_x
+	   store_8 [0],r3
+   turtle_x_label:
+
+   cmp r2,0
+   jz turtle_y_label
+	   load_8 r4,[0]
+		turtle_move_loop_y:
+			cmp r2,0
+			jl abs_ty
+				sub r2,r2,1
+				add r4,r4,1
+			abs_ty:
+			jg neg_abs_ty
+				add r2,r2,1
+				sub r4,r4,1
+			neg_abs_ty:
+		cmp r2,0
+		jnz turtle_move_loop_y
+	   store_8 [1],r4
+   turtle_y_label:
+   pop r4
+   pop r3
+   ret
